@@ -1,0 +1,27 @@
+type Mutation {
+  login(email: String!, password: String!): LoginResponse!
+  signup(
+    email: String!
+    password: String!
+    username: String!
+    confirmPassword: String!
+  ): Response!
+}
+
+type Response {
+  success: Boolean
+  message: String
+}
+type LoginResponse {
+  userDetail: UserDetail
+  success: Boolean
+  message: String
+}
+
+type UserDetail {
+  token: String
+  role: String
+  email: String
+  username: String
+  otp: String
+}
