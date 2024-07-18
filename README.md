@@ -37,10 +37,3 @@ query {
   }
 }
 ```
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Feel free to replace placeholders like `yourusername`, `your-repo`, `yourport`, and `exampleQuery` with the actual values relevant to your project.
