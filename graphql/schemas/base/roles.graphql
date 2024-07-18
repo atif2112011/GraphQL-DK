@@ -1,0 +1,59 @@
+type Query {
+  getAllRoles: RolesResponse!
+  getPaginatedRoles(page: Int!): PaginatedRolesResponse!
+  getRoleById(id: String!): getRoleByIdResponse!
+}
+
+type Mutation {
+  addRole(id: Int!, name: String!, description: String): addRoleResponse!
+  updateRole(id: Int!, input: newRoleInput!): updateRoleResponse!
+  deleteRole(id: Int!): deleteRoleResponse!
+}
+input newRoleInput {
+  id: Int!
+  name: String!
+  description: String
+}
+type RolesResponse {
+  success: Boolean
+  message: String
+  roles: [Role]
+}
+
+type Role {
+  _id: String!
+  id: String!
+  name: String!
+  description: String
+}
+
+type PaginatedRolesResponse {
+  currentPage: Int
+  totalPages: Int
+  totalCount: Int
+  success: Boolean
+  message: String
+  roles: [Role]
+}
+
+type getRoleByIdResponse {
+  success: Boolean
+  message: String
+  role: Role
+}
+
+type addRoleResponse {
+  success: Boolean
+  message: String
+  role: Role
+}
+type updateRoleResponse {
+  success: Boolean
+  message: String
+  role: Role
+}
+
+type deleteRoleResponse {
+  success: Boolean
+  message: String
+}

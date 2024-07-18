@@ -1,0 +1,136 @@
+scalar Date
+
+type Mutation {
+  addCourse(
+    title: String!
+    description: String!
+    modules: [ModulesInput]!
+    fees: Float!
+    coverImage: String
+    mentor: String!
+  ): addCourseResponse!
+  deleteCourse(courseId: String!): deleteCourseResponse!
+  requestCourseSuspend(
+    courseId: String!
+    userId: String!
+  ): requestCourseSuspendResponse!
+  joinWaitlist(courseId: String!, userId: String!): joinWaitlistResponse!
+  enrollUser(courseId: String!, userId: String!): enrollUserResponse!
+}
+
+type Query {
+  getCourses: getCoursesResponse!
+  getCourseById(courseId: String!): getCourseByIdResponse!
+}
+
+type enrollUserResponse {
+  success: Boolean
+  message: String
+  enrollment: Enrollment
+}
+type joinWaitlistResponse {
+  success: Boolean
+  message: String
+  waitlist: Waitlist
+}
+type requestCourseSuspendResponse {
+  success: Boolean
+  message: String
+  course: Course
+}
+type deleteCourseResponse {
+  success: Boolean
+  message: String
+}
+type getCourseByIdResponse {
+  success: Boolean
+  message: String
+  course: Course_Populated
+}
+
+type getCoursesResponse {
+  success: Boolean
+  message: String
+  courses: [Course]
+}
+
+type Course {
+  _id: String
+  title: String
+  description: String
+  mentor: String
+  isSuspend: Boolean
+  isApproved: Boolean
+  suspendRequest: Boolean
+  fees: Float
+  modules: [String]
+}
+
+type Course_Populated {
+  _id: String
+  title: String
+  description: String
+  mentor: String
+  isSuspend: Boolean
+  isApproved: Boolean
+  suspendRequest: Boolean
+  fees: Float
+  modules: [Module_Populated]
+}
+
+type Module_Populated {
+  _id: String
+  title: String
+  description: String
+  lessons: [Lessons_Populated]
+  order: Int
+  courseId: String
+}
+
+type Lessons_Populated {
+  _id: String
+  title: String
+  description: String
+  content: String
+  moduleId: String
+}
+
+type Waitlist {
+  _id: String
+  courseId: String
+  joined: [WaitingUsers]
+}
+
+type WaitingUsers {
+  userId: String
+  joinedAt: Date
+}
+
+type Enrollment {
+  _id: String
+  courseId: String
+  enrolled: [EnrolledUsers]
+}
+
+type EnrolledUsers {
+  userId: String
+  enrolledAt: Date
+}
+
+input ModulesInput {
+  title: String
+  description: String
+  submodules: [LessonsInput]
+}
+
+input LessonsInput {
+  title: String
+  description: String
+  content: String
+}
+
+type addCourseResponse {
+  success: Boolean
+  message: String
+  course: Course
+}

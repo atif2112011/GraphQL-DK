@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+
 const validateLoginInput = async (resolve, root, args, context, info) => {
   try {
     const { email, password } = args;
@@ -161,11 +163,180 @@ const validOtp = async (resolve, root, args, context, info) => {
   }
 };
 
+const validPage = async (resolve, root, args, context, info) => {
+  const { page } = args;
+  try {
+    if (!page)
+      throw new Error(
+        "Page Value Not Found. Page value not given in request parameters"
+      );
+
+    if (/^[0-9]+$/.test(page) && page >= 1) {
+      return resolve(root, args, context, info);
+    } else {
+      throw new Error(
+        "Invalid Page format. Page field should be a valid positive number"
+      );
+    }
+  } catch (err) {
+    // Handle any unexpected errors
+    console.log(`Error:`, err.message);
+    throw new Error(err.message);
+  }
+};
+
+const validId = async (resolve, root, args, context, info) => {
+  try {
+    const { id } = args;
+
+    if (/^[0-9a-fA-F]{24}$/.test(id)) {
+      return resolve(root, args, context, info);
+    } else {
+      throw new Error("Invalid ID format. Please provide a valid Id.");
+    }
+  } catch (err) {
+    // Handle any unexpected errors
+    console.log(`Error:`, err.message);
+    throw new Error(err.message);
+  }
+};
+
+const validRoleId = async (resolve, root, args, context, info) => {
+  try {
+    const { id } = args;
+
+    if (!isNaN(id) && id >= 1 && id <= 10) {
+      return resolve(root, args, context, info);
+    } else {
+      throw new Error(
+        "Invalid Role Id. Role ID should be a valid number between 1 and 10."
+      );
+    }
+  } catch (err) {
+    // Handle any unexpected errors
+    console.log(`Error:`, err.message);
+    throw new Error(err.message);
+  }
+};
+
+const validRole = async (resolve, root, args, context, info) => {
+  try {
+    const { id, name } = args;
+    if (typeof id !== "number" || id < 1 || id > 10) {
+      throw new Error(
+        "Invalid Role ID. ID should be a valid number between 1 and 10"
+      );
+    }
+    if (!/^[a-zA-Z]+$/.test(name)) {
+      throw new Error("Invalid Role Name. Role Name must contain only letters");
+    }
+    return resolve(root, args, context, info);
+  } catch (err) {
+    // Handle any unexpected errors
+    console.log(`Error:`, err.message);
+    throw new Error(err.message);
+  }
+};
+
+const validateCourseInput = async (resolve, root, args, context, info) => {
+  try {
+    const { title, description, modules, fees, coverImage, mentor } = args;
+
+    const titleRegex = /^[a-zA-Z0-9\s]{3,100}$/; // Alphanumeric and spaces, 3-100 characters
+    const descriptionRegex = /^[a-zA-Z0-9\s.,!?-]{10,500}$/; // Alphanumeric, spaces, and some punctuation, 10-500 characters
+    const feesRegex = /^[0-9]{1,6}$/; // Numeric, up to 6 digits
+    const base64ImageRegex = /^data:image\/jpeg;base64,/; // Base64 image data
+
+    // Validate title
+    if (!titleRegex.test(title)) {
+      throw new Error(
+        "Invalid title format. Alphanumeric and spaces only, 3-100 characters."
+      );
+    }
+
+    // Validate description
+    if (!descriptionRegex.test(description)) {
+      throw new Error(
+        "Invalid description format. Alphanumeric, spaces, and some punctuation, 10-500 characters."
+      );
+    }
+
+    // Validate fees
+    if (!feesRegex.test(fees)) {
+      throw new Error("Invalid fees format. Numeric value, up to 6 digits.");
+    }
+
+    // Validate coverImage
+    if (coverImage && !base64ImageRegex.test(coverImage)) {
+      throw new Error(
+        "Invalid coverImage format. Must be a valid base64 encoded JPEG image."
+      );
+    }
+
+    // Validate mentor (assuming it's a valid ObjectId)
+    if (!mongoose.Types.ObjectId.isValid(mentor)) {
+      throw new Error("Invalid mentor ID format.");
+    }
+
+    // Validate modules (assuming it's an array of objects)
+    if (!Array.isArray(modules) || modules.length === 0) {
+      throw new Error("Modules must be a non-empty array.");
+    }
+
+    // Validate each module object
+    for (const mod of modules) {
+      if (!titleRegex.test(mod.title)) {
+        throw new Error(
+          "Invalid module title format. Alphanumeric and spaces only, 3-100 characters."
+        );
+      }
+
+      if (mod.description && !descriptionRegex.test(mod.description)) {
+        throw new Error(
+          "Invalid module description format. Alphanumeric, spaces, and some punctuation, 10-500 characters."
+        );
+      }
+
+      if (!Array.isArray(mod.submodules)) {
+        throw new Error("Submodules must be an array.");
+      }
+      for (const sub of mod.submodules) {
+        if (!titleRegex.test(sub.title)) {
+          throw new Error(
+            "Invalid submodule title format. Alphanumeric and spaces only, 3-100 characters."
+          );
+        }
+
+        if (sub.description && !descriptionRegex.test(sub.description)) {
+          throw new Error(
+            "Invalid submodule description format. Alphanumeric, spaces, and some punctuation, 10-500 characters."
+          );
+        }
+        if (sub.content && typeof sub.content !== "string") {
+          throw new Error("Submodule content must be a string.");
+        }
+      }
+    }
+
+    // If all validations pass, proceed to the next middleware or route handler
+    return resolve(root, args, context, info);
+  } catch (err) {
+    // Handle any unexpected errors
+    console.log(`Error:`, err.message);
+    throw new Error(err.message);
+  }
+};
+
 module.exports = {
+  validateCourseInput,
   validateLoginInput,
   validateSignupInput,
   validDomain,
   validOtp,
   validEmail,
   validatePasswordReset,
+  validPage,
+  validId,
+  validRole,
+  validRoleId,
 };

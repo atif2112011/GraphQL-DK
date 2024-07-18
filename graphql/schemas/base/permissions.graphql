@@ -1,0 +1,61 @@
+type Query {
+  getAllPermissions: PermissionsResponse!
+  getPaginatedPermissions(page: Int!): PaginatedPermResponse!
+  getPermissionById(id: String!): getPermissionByIdResponse!
+}
+
+type Mutation {
+  addPermission(userId: String!, roleId: String!): addPermissionResponse!
+  updatePermission(
+    permissionId: String!
+    input: newPermissionInput!
+  ): updatePermissionResponse!
+  deletePermission(permissionId: String!): deletePermissionResponse!
+}
+
+input newPermissionInput {
+  userId: String!
+  roleId: String!
+}
+type PermissionsResponse {
+  success: Boolean
+  message: String
+  permissions: [Permission]
+}
+
+type Permission {
+  _id: String!
+  userId: String!
+  roleId: String!
+}
+
+type PaginatedPermResponse {
+  currentPage: Int
+  totalPages: Int
+  totalCount: Int
+  success: Boolean
+  message: String
+  permissions: [Permission]
+}
+
+type getPermissionByIdResponse {
+  success: Boolean
+  message: String
+  permission: Permission
+}
+
+type addPermissionResponse {
+  success: Boolean
+  message: String
+  permission: Permission
+}
+type updatePermissionResponse {
+  success: Boolean
+  message: String
+  permission: Permission
+}
+
+type deletePermissionResponse {
+  success: Boolean
+  message: String
+}

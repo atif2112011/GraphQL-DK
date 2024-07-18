@@ -19,6 +19,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-rate-limit": "^7.3.1",
+    "fs": "^0.0.1-security",
     "geoip-lite": "^1.4.10",
     "graphql-middleware": "^6.1.35",
     "mongoose": "^8.5.0",

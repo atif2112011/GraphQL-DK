@@ -1,0 +1,73 @@
+type Mutation {
+  addInternship(
+    name: String!
+    description: String!
+    techStack: String!
+  ): addInternshipResponse!
+
+  addSelectedIntern(
+    userId: String!
+    internId: String!
+    duration: String!
+    startDate: Date!
+    endDate: Date!
+  ): GeneralInternshipResponse!
+
+  applyInternship(
+    internId: String!
+    userId: String!
+  ): GeneralInternshipResponse!
+
+  generateInternPDF(
+    userId: String!
+    title: String!
+    greetings: String!
+  ): GeneralInternshipResponse!
+
+  selectProvisionalIntern(
+    userId: String!
+    internId: String!
+    duration: String!
+    startDate: Date!
+    endDate: Date!
+  ): GeneralInternshipResponse!
+
+  scheduleInterview(
+    userId: String!
+    internId: String!
+    interviewDate: Date!
+    interviewer: String!
+  ): scheduleInterviewResponse!
+}
+
+type scheduleInterviewResponse {
+  success: Boolean
+  message: String
+  interview: Interview
+}
+
+type Interview {
+  _id: String
+  userId: String
+  internId: String
+  interviewDate: Date
+  Interviewer: String
+}
+
+type GeneralInternshipResponse {
+  success: Boolean
+  message: String
+}
+
+type addInternshipResponse {
+  success: Boolean
+  message: String
+  internship: Internship
+}
+
+type Internship {
+  _id: String
+  name: String
+  description: String
+  techStack: String
+}

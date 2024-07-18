@@ -6,6 +6,21 @@ type Mutation {
     username: String!
     confirmPassword: String!
   ): Response!
+  signup_verify(email: String!, otp: String!): Response!
+  reset_password_token(email: String!): Response!
+  reset_password(
+    password: String!
+    confirmPassword: String!
+    token: String!
+  ): Response!
+  getUser(username: String!): UserResponse!
+}
+
+type UserResponse {
+  success: Boolean
+  message: String
+  email: String
+  username: String
 }
 
 type Response {

@@ -1,0 +1,61 @@
+type Query {
+  getQueryMentor(userId: String!): getQueryResponse!
+  getQueryManager(userId: String!): getQueryResponse!
+  getQueryStudent(userId: String!): getQueryResponse!
+  getQuerySupport(userId: String!): getQueryResponse!
+}
+
+type Mutation {
+  addQuery(
+    title: String!
+    description: String!
+    courseId: String!
+    userId: String!
+    status: String!
+    category: String!
+    mmId: String!
+  ): addQueryResponse!
+  verifyQuery(queryId: String!, userId: String!): addQueryResponse!
+  resolveQueryMentor(
+    queryId: String!
+    userId: String!
+    resolveMessage: String!
+  ): addQueryResponse!
+  resolveQueryManager(
+    queryId: String!
+    userId: String!
+    resolveMessage: String!
+  ): addQueryResponse!
+  addFollowupQuery(
+    title: String!
+    description: String!
+    courseId: String!
+    userId: String!
+    parentQueryId: String!
+  ): addQueryResponse!
+}
+
+type addQueryResponse {
+  success: Boolean
+  message: String
+  query: Query_2
+}
+type getQueryResponse {
+  success: Boolean
+  message: String
+  queries: [Query_2]
+}
+
+type Query_2 {
+  _id: String
+  title: String
+  description: String
+  courseId: String
+  userId: String
+  status: String
+  category: String
+  mmId: String
+  resolvedBy: String
+  resolveMessage: String
+  parentQueryId: String
+}

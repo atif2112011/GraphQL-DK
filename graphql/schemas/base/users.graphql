@@ -1,0 +1,78 @@
+type Query {
+  getAllUsers: getAllUsersResponse!
+  getUserById(id: String!): getUserByIdResponse!
+  getUserSessions: getUSerSessionsResponse!
+  getUsernames(username: String!): getUsernamesResponse!
+}
+
+type Mutation {
+  deleteSession(sessionId: String!): deleteSessionResponse!
+  suspendAccount(userId: String!): suspendAccountResponse!
+  approveCourseSuspend(courseId: String!): approveCourseSuspendResponse!
+  approveCourse(courseId: String!): approveCourseResponse!
+}
+
+type deleteSessionResponse {
+  success: Boolean
+  message: String
+}
+type approveCourseSuspendResponse {
+  success: Boolean
+  message: String
+  course: Course
+}
+type approveCourseResponse {
+  success: Boolean
+  message: String
+  course: Course
+}
+
+type suspendAccountResponse {
+  success: Boolean
+  message: String
+}
+
+type getAllUsersResponse {
+  success: Boolean
+  message: String
+  users: [User]
+}
+type getUSerSessionsResponse {
+  success: Boolean
+  message: String
+  userId: String
+  count: Int
+  sessions: [UserSession]
+}
+
+type UserSession {
+  sessionId: String
+  date: String
+  time: String
+  location: String
+  device: String
+}
+
+type getUserByIdResponse {
+  success: Boolean
+  message: String
+  user: User
+}
+
+type User {
+  _id: String
+  username: String
+  email: String
+  password: String
+}
+
+type getUsernamesResponse {
+  success: Boolean
+  message: String
+  users: [UsernamesObject]
+}
+
+type UsernamesObject {
+  userId: String
+  username: String
+}
